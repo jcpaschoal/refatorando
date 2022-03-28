@@ -14,7 +14,12 @@ class UserCreate(UserBase):
     password: str
     first_name = str
     last_name = str
+    nif: Optional[int] = None
 
 
 class UserUpdate(UserBase):
     password: Optional[str] = None
+
+
+class UserResponse(UserBase):
+    id: Optional[int] = None

@@ -1,5 +1,5 @@
 from typing import Any, Optional, Type, TypeVar
-from app.database.models.base_model import Base
+from database.models.base_model import Base
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 

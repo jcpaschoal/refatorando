@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, CHAR, BOOLEAN, VARCHAR, Enum as ENUM
-from app.database.models.base_model import Base
+from database.models.base_model import Base
 from sqlalchemy.orm import relationship
 from enum import Enum
 
@@ -18,7 +18,5 @@ class User(Base):
     password = Column(CHAR(60), nullable=False)
     active = Column(BOOLEAN, nullable=False)
     nif = Column(Integer, nullable=True)
-    address = relationship("address")
-    contact = relationship("contact")
 
 

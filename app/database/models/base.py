@@ -1,5 +1,5 @@
-from app.database.models.base_model import Base
+from database.models.base_model import Base
 
-from app.database.models.user import User
-from app.database.models.contact import Contact
-from app.database.models.address import Address, PostalCode
+from database.models.contact import Contact
+from database.models.address import Address, PostalCode
+from database.models.user import User
