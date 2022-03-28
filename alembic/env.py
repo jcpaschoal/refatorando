@@ -7,9 +7,7 @@ import os
 # access to the values within the .ini file in use.
 config = context.config
 
-import sys
 
-sys.path = ['', '..'] + sys.path[1:]
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -18,8 +16,11 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from app.database.models.base import Base
+import sys
 
+sys.path = ['', '..'] + sys.path[1:]
+
+from app.database.models.base import Base
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,

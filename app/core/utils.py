@@ -8,7 +8,7 @@ def get_mysql_uri() -> str:
     user = os.environ.get('DB_USER', 'root')
     host = os.environ.get('DB_HOST', 'localhost')
     db_name = os.environ.get('DB_NAME', 'softly')
-    password = os.environ.get('DB_PASSWORD', 'abc123')
+    password = os.environ.get('DB_PASSWORD', 'zeca1234')
     port = 3306 if host == 'localhost' else 33060
     return f"mysql+pymysql://{user}:{password}@{host}:{port}/{db_name}"
 
