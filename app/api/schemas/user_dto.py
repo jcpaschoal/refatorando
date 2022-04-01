@@ -29,6 +29,8 @@ class UserBase(BaseModel):
     first_name: str | None = Field(None, min_length=4, max_length=45)
     last_name: str | None = Field(None, min_length=4, max_length=45)
     nif: int = None
+    is_owner: bool | None
+    is_manager: bool | None
 
     @validator("nif")
     def check_nif(cls, v):
@@ -37,6 +39,7 @@ class UserBase(BaseModel):
         return v
 
 # TODO usar validator para senhas
+# localhost/users/ POST
 class UserCreate(UserBase):
     email: EmailStr
     # Minimum eight characters, at least one letter, one number and one special character:
@@ -49,6 +52,7 @@ class UserCreate(UserBase):
     )
     first_name: str = Field(..., min_length=4, max_length=45)
     last_name: str = Field(..., min_length=4, max_length=45)
+    
 
 
 class UserUpdate(UserBase):

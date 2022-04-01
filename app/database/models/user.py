@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, CHAR, BOOLEAN, VARCHAR, Enum as ENUM
+from sqlalchemy import Column, Integer, CHAR, BOOLEAN, VARCHAR, Enum as ENUM, DECIMAL, ForeignKey
 from .base_model import Base
 from sqlalchemy.orm import relationship
 from enum import Enum
@@ -20,3 +20,11 @@ class User(Base):
     nif = Column(Integer, nullable=True)
     
 
+class Manager(Base):
+    mananger_id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("user.user_id"), nullable=False)
+    rating  = Column(DECIMAL(5,2), nullable=False)
+
+class Owner(Base):
+    owner_id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("user.user_id"), nullable=False)

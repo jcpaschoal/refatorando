@@ -11,6 +11,7 @@ router = APIRouter()
 @router.post("/", response_model=schemas.UserResponse)
 def create_user(user_in: schemas.UserCreate, db: Session = Depends(get_db_session)) -> Any:
     
+    print(user_in)
     user = service.user.get_by_email(db, email=user_in.email)
     if user:
         raise HTTPException(
@@ -44,7 +45,7 @@ def add_address(user_in: schemas.UserCreate, db: Session = Depends(get_db_sessio
     return schemas.UserResponse(**db_obj)
 
 
-@router.post("/contact", response_model=schemas.UserResponse)
+@router.post("/company", response_model=schemas.UserResponse)
 def add_contact(user_in: schemas.UserCreate, db: Session = Depends(get_db_session)):
     db_obj = service.user.create(db, user_in)
     return schemas.UserResponse(**db_obj)
