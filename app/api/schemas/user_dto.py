@@ -1,8 +1,9 @@
 from typing import Optional
 from pydantic import BaseModel, EmailStr, Field, validator
 
+
 def nif_must_be_valid(nif: str) -> bool:
-    nif = str(nif) if isinstance(nif, int) else nif   
+    nif = str(nif) if isinstance(nif, int) else nif
     len_nif = len(nif)
 
     if (
@@ -14,10 +15,10 @@ def nif_must_be_valid(nif: str) -> bool:
     sumAux = 0
     for i in range(9, 1, -1):
         sumAux += i * (int(nif[len_nif - i]))
-    
+
     module = sumAux % 11
 
-    nif_without_last_digit = nif[0:8]    
+    nif_without_last_digit = nif[0:8]
     if module == 0 or module == 1:
         return f"{nif_without_last_digit}0" == nif
     else:
@@ -28,7 +29,7 @@ class UserBase(BaseModel):
     email: EmailStr | None
     first_name: str | None = Field(None, min_length=4, max_length=45)
     last_name: str | None = Field(None, min_length=4, max_length=45)
-    nif: int = None
+    nif: int | None
     is_owner: bool | None
     is_manager: bool | None
 
@@ -38,8 +39,8 @@ class UserBase(BaseModel):
             raise ValueError("invalid nif")
         return v
 
-# TODO usar validator para senhas
-# localhost/users/ POST
+
+
 class UserCreate(UserBase):
     email: EmailStr
     # Minimum eight characters, at least one letter, one number and one special character:
@@ -48,11 +49,10 @@ class UserCreate(UserBase):
         min_length=4,
         max_length=45,
         regex="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$",
-        description="The price must be greater than zero"
+        description="The price must be greater than zero",
     )
     first_name: str = Field(..., min_length=4, max_length=45)
     last_name: str = Field(..., min_length=4, max_length=45)
-    
 
 
 class UserUpdate(UserBase):

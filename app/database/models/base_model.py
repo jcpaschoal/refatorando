@@ -7,9 +7,12 @@ class Base:
     __name__: str
 
     created_at = Column(TIMESTAMP, server_default=func.current_timestamp())
-    updated_at = Column(TIMESTAMP, server_default=func.current_timestamp(), onupdate=func.current_timestamp())
+    updated_at = Column(
+        TIMESTAMP,
+        server_default=func.current_timestamp(),
+        onupdate=func.current_timestamp(),
+    )
 
     @declared_attr
     def __tablename__(cls) -> str:
         return cls.__name__.lower()
-

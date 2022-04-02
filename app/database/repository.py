@@ -39,6 +39,3 @@ class SqlAlchemyRepository:
         db.delete(db_object)
         db.commit()
         return model_id
-
-
-

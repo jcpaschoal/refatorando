@@ -1,5 +1,6 @@
+from turtle import title
 from typing import Any
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Path
 from sqlalchemy.orm import Session
 from core.utils import get_db_session
 import api.schemas as schemas
@@ -9,44 +10,43 @@ router = APIRouter()
 
 
 @router.post("/", response_model=schemas.UserResponse)
-def create_user(user_in: schemas.UserCreate, db: Session = Depends(get_db_session)) -> Any:
-    
-    print(user_in)
+def create_user(
+    user_in: schemas.UserCreate, db: Session = Depends(get_db_session)
+) -> Any:
+
     user = service.user.get_by_email(db, email=user_in.email)
     if user:
         raise HTTPException(
             status_code=400,
             detail="Email already exists in the sytem,",
         )
-    
+
     user = service.user.create(db, obj_in=user_in)
-    
+
     return user
 
-# TODO pegar id do token
-@router.delete("/", response_model=schemas.UserResponse, status_code=200)
-def deactivate_user(db: Session = Depends(get_db_session)) -> Any:
+
+# TODO retirar parametro do id e pegar do token
+@router.delete("/{user_id}", status_code=200)
+def deactivate_user(user_id: int = Path(..., title="The id of the user to delete"), db: Session = Depends(get_db_session)) -> Any:
 
     user = service.user.get_by_id(db, 1)
-    
+
     if user is None:
         raise HTTPException(
             status_code=400,
             detail="User does not exists",
         )
-        
+
     user = service.user.deactivate_user(db, user)
-    return user
+    return {"user_id": user.user_id}
 
 
-@router.post("/address", response_model=schemas.UserResponse)
-def add_address(user_in: schemas.UserCreate, db: Session = Depends(get_db_session)):
-    db_obj = service.user.create(db, user_in)
-    return schemas.UserResponse(**db_obj)
+@router.get("/address", response_model=schemas.AddressResponse)
+def add_address(address_in: schemas.AddressCreate, db: Session = Depends(get_db_session)):
+    return address_in
 
 
-@router.post("/company", response_model=schemas.UserResponse)
-def add_contact(user_in: schemas.UserCreate, db: Session = Depends(get_db_session)):
-    db_obj = service.user.create(db, user_in)
-    return schemas.UserResponse(**db_obj)
-
+@router.post("/company", response_model=schemas.CompanyResponse)
+def add_contact(company_in: schemas.CompanyCreate, db: Session = Depends(get_db_session)):
+    return company_in

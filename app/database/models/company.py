@@ -1,4 +1,13 @@
-from sqlalchemy import Column, Integer, CHAR, BOOLEAN, VARCHAR, Enum as ENUM, DECIMAL, ForeignKey
+from sqlalchemy import (
+    Column,
+    Integer,
+    CHAR,
+    BOOLEAN,
+    VARCHAR,
+    Enum as ENUM,
+    DECIMAL,
+    ForeignKey,
+)
 from .base_model import Base
 from sqlalchemy.orm import relationship
 from enum import Enum

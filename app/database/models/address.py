@@ -12,8 +12,9 @@ class PostalCode(Base):
 
 class Address(Base):
     address_id = Column(Integer, primary_key=True)
-    postal_code_id = Column(Integer, ForeignKey("postal_code.postal_code_id"), nullable=False)
+    postal_code_id = Column(
+        Integer, ForeignKey("postal_code.postal_code_id"), nullable=False
+    )
     user_id = Column(Integer, ForeignKey("user.user_id"), nullable=False, index=True)
-    address = Column(VARCHAR(100), nullable=False, index=True)
-    details = Column(VARCHAR(200),  nullable=True)
-
+    address = Column(VARCHAR(200), nullable=False, index=True)
+    details = Column(VARCHAR(200), nullable=True)
