@@ -1,3 +1,4 @@
+from msilib import Table
 from sqlalchemy import (
     Column,
     Integer,
@@ -7,15 +8,30 @@ from sqlalchemy import (
     Enum as ENUM,
     DECIMAL,
     ForeignKey,
+    Table,
 )
-from .base_model import Base
 from sqlalchemy.orm import relationship
+from .company import CompanyManager
+from .base_model import Base
 from enum import Enum
 
 
 class Encoder(str, Enum):
     bcrypt = "bcrypt"
     scrypt = "scrypt"
+
+
+UserRole = Table(
+    "user_role",
+    Base.metadata,
+    Column("user_id", Integer, ForeignKey("user.user_id"), nullable=False),
+    Column("role_id", Integer, ForeignKey("role.role_id"), nullable=False),
+)
+
+
+class Role(Base):
+    role_id = Column(Integer, primary_key=True, index=True)
+    description = Column(VARCHAR(45), nullable=False, index=True, unique=True)
 
 
 class User(Base):
@@ -27,19 +43,25 @@ class User(Base):
     password = Column(CHAR(60), nullable=False)
     active = Column(BOOLEAN, nullable=False, default=True)
     nif = Column(Integer, nullable=True)
+    roles = relationship("Role", secondary=UserRole)
 
 
 class ManagerCategory(Base):
     __tablename__ = "manager_category"
-    mananger_category_id = Column(Integer, primary_key=True, index=True)
+    manager_category_id = Column(Integer, primary_key=True, index=True)
     description = Column(VARCHAR(45), nullable=False, unique=True)
 
 
 class Manager(Base):
-    mananger_id = Column(Integer, primary_key=True, index=True)
+    manager_id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("user.user_id"), nullable=False)
-    mananger_category_id = Column(Integer, ForeignKey("manager_category.manager_category_id"), nullable=False)
-    rating = Column(DECIMAL(5, 2), nullable=True)
+    manager_category_id = Column(
+        Integer, ForeignKey("manager_category.manager_category_id"), nullable=False
+    )
+    rating = Column(DECIMAL(3, 2), nullable=True, default=0)
+    company = relationship(
+        "Company", secondary=CompanyManager, back_populates="managers"
+    )
 
 
 class Owner(Base):

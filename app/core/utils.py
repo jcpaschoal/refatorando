@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from typing import Generator
 import os
+
 
 
 def get_mysql_uri() -> str:
@@ -39,5 +40,12 @@ def get_db_session() -> Generator:
     try:
         db = DEFAULT_SESSION_FACTORY()
         yield db
+    finally:
+        db.close()
+
+def get_session() -> Session:
+    try:
+        db = DEFAULT_SESSION_FACTORY()
+        return db
     finally:
         db.close()

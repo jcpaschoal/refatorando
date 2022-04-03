@@ -1,5 +1,33 @@
-from typing import Optional
+from tabnanny import check
+from typing import Any, Optional, Dict
+from unicodedata import category
+from sqlalchemy.orm import Session
+from core.utils import get_session
+from database.models.user import ManagerCategory
 from pydantic import BaseModel, EmailStr, Field, validator
+
+#TODO criar endpoit get para categorias
+def load_manager_categories(db: Session) -> Dict:
+    categories_dict = dict()
+    categories = db.query(ManagerCategory).all()
+    for category in categories:
+        categories_dict[category.manager_category_id] = category.description
+        categories_dict[category.description] = category.manager_category_id
+    return categories_dict
+
+
+CATEGORIES = load_manager_categories(get_session())
+
+def check_category(category) -> int:
+    if category_id := CATEGORIES.get(category, None) is not None and isinstance(
+        category, str
+    ):
+        return category_id
+    if description := CATEGORIES.get(category, None) is not None and isinstance(
+        category, int
+    ):
+        return CATEGORIES[description]
+    return None
 
 
 def nif_must_be_valid(nif: str) -> bool:
@@ -29,16 +57,25 @@ class UserBase(BaseModel):
     email: EmailStr | None
     first_name: str | None = Field(None, min_length=4, max_length=45)
     last_name: str | None = Field(None, min_length=4, max_length=45)
-    nif: int | None
     is_owner: bool | None
-    is_manager: bool | None
+    category: int | str | None
+    nif: int | str = None
 
     @validator("nif")
     def check_nif(cls, v):
+        if v is None:
+            return v
         if nif_must_be_valid(v) is False:
             raise ValueError("invalid nif")
         return v
 
+    @validator("category")
+    def check_category(cls, v):
+        if v is None:
+            return v
+        if check_category(v) is None:
+            raise ValueError("invalid category")
+        return v
 
 
 class UserCreate(UserBase):
@@ -66,7 +103,5 @@ class UserUpdate(UserBase):
 
 
 class UserResponse(UserBase):
-    user_id: Optional[int] = None
-
     class Config:
         orm_mode = True
