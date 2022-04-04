@@ -6,7 +6,7 @@ from core.utils import get_session
 from database.models.user import ManagerCategory
 from pydantic import BaseModel, EmailStr, Field, validator
 
-#TODO criar endpoit get para categorias
+# TODO criar endpoit get para categorias
 def load_manager_categories(db: Session) -> Dict:
     categories_dict = dict()
     categories = db.query(ManagerCategory).all()
@@ -17,6 +17,7 @@ def load_manager_categories(db: Session) -> Dict:
 
 
 CATEGORIES = load_manager_categories(get_session())
+
 
 def check_category(category) -> int:
     if category_id := CATEGORIES.get(category, None) is not None and isinstance(

@@ -31,7 +31,8 @@ UserRole = Table(
 
 class Role(Base):
     role_id = Column(Integer, primary_key=True, index=True)
-    description = Column(VARCHAR(45), nullable=False, index=True, unique=True)
+    name = Column(VARCHAR(45), nullable=False, index=True, unique=True)
+    description = Column(VARCHAR(45), nullable=False, index=False, unique=True)
 
 
 class User(Base):

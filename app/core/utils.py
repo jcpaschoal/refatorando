@@ -4,7 +4,6 @@ from typing import Generator
 import os
 
 
-
 def get_mysql_uri() -> str:
     user = os.environ.get("DB_USER", "root")
     host = os.environ.get("DB_HOST", "localhost")
@@ -42,6 +41,7 @@ def get_db_session() -> Generator:
         yield db
     finally:
         db.close()
+
 
 def get_session() -> Session:
     try:
