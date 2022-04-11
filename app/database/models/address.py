@@ -7,7 +7,7 @@ class PostalCode(Base):
     __tablename__ = "postal_code"
     postal_code_id = Column(Integer, primary_key=True, index=True)
     city = Column(VARCHAR(50), nullable=False, unique=True)
-    address = relationship("address")
+    address = relationship("Address")
 
 
 class Address(Base):

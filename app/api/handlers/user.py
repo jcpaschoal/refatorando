@@ -1,5 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, Path
+from fastapi import APIRouter, Depends, HTTPException, Path, Security
 from core.utils import get_db_session
+from core.auth import get_current_active_user
+from database.models.user import User
 import api.service as service
 from sqlalchemy.orm import Session
 import api.schemas as schemas
@@ -48,13 +50,16 @@ def deactivate_user(
 # user/address
 @router.get("/address", response_model=schemas.AddressResponse)
 def add_address(
-    address_in: schemas.AddressCreate, db: Session = Depends(get_db_session)
+    address_in: schemas.AddressCreate,
+    db: Session = Depends(get_db_session),
+    current_user: User = Depends(get_current_active_user),
 ):
+
+    print(current_user)
+    
+    if current_user is None:
+        raise HTTPException(status_code=400, detail="User does not exists")
+
+    address = service.user.add_address(db, address_in)
+
     return address_in
-
-
-@router.post("/company", response_model=schemas.CompanyResponse)
-def add_contact(
-    company_in: schemas.CompanyCreate, db: Session = Depends(get_db_session)
-):
-    return company_in

@@ -28,11 +28,27 @@ UserRole = Table(
     Column("role_id", Integer, ForeignKey("role.role_id"), nullable=False),
 )
 
+RolePermission = Table(
+    "role_permission",
+    Base.metadata,
+    Column("role_id", Integer, ForeignKey("role.role_id"), nullable=False),
+    Column(
+        "permission_id", Integer, ForeignKey("permission.permission_id"), nullable=False
+    ),
+)
+
+
+class Permission(Base):
+    permission_id = Column(Integer, primary_key=True, index=True)
+    name = Column(VARCHAR(45), nullable=False, index=True, unique=True)
+    description = Column(VARCHAR(45), nullable=False, index=False, unique=True)
+
 
 class Role(Base):
     role_id = Column(Integer, primary_key=True, index=True)
     name = Column(VARCHAR(45), nullable=False, index=True, unique=True)
     description = Column(VARCHAR(45), nullable=False, index=False, unique=True)
+    permissions = relationship("Permission", secondary=RolePermission)
 
 
 class User(Base):

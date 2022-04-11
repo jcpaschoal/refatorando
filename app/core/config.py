@@ -9,8 +9,8 @@ class Settings(BaseSettings):
     SECRET_KEY: str = secrets.token_urlsafe(32)
     # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
-    #SERVER_NAME: str
-    #SERVER_HOST: AnyHttpUrl
+    # SERVER_NAME: str
+    # SERVER_HOST: AnyHttpUrl
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
@@ -21,13 +21,13 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
-   # PROJECT_NAME: str
+    # PROJECT_NAME: str
     SENTRY_DSN: Optional[HttpUrl] = None
 
-    #POSTGRES_SERVER: str
-    #POSTGRES_USER: str
-    #POSTGRES_PASSWORD: str
-    #POSTGRES_DB: str
+    # POSTGRES_SERVER: str
+    # POSTGRES_USER: str
+    # POSTGRES_PASSWORD: str
+    # POSTGRES_DB: str
     SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
 
     class Config:

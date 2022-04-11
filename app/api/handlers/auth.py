@@ -14,16 +14,20 @@ router = APIRouter()
 @router.post("/", response_model=Token)
 def authenticate_user(
     form_data: OAuth2PasswordRequestForm = Depends(),
-    db: Session = Depends(get_db_session)
+    db: Session = Depends(get_db_session),
 ):
     user = service.user.authenticate(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect username or password")
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    #TODO CRIAR roles dos tipos de usuario
-    #print(user.roles)
+
+    scopes = []
+    for role in user.roles:
+        for permission in role.permissions:
+            scopes.append(permission.name)
+    
     access_token = create_access_token(
-        data={"sub": user.email, "scopes": form_data.scopes},
+        data={"sub": user.email, "scopes": scopes},
         expires_delta=access_token_expires,
     )
     return {"access_token": access_token, "token_type": "bearer"}

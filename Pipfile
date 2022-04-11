@@ -13,6 +13,8 @@ uvicorn = {extras = ["standard"], version = "*"}
 pydantic = {extras = ["email"], version = "*"}
 passlib = "*"
 bcrypt = "*"
+python-jose = "*"
+python-multipart = "*"
 
 [dev-packages]
 flake8 = "*"

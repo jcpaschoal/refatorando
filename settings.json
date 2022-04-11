@@ -1,0 +1,5 @@
+{
+           "python.venvPath": "/Users/me/.local/share/virtualenvs/",
+       "python.pythonPath": "/Users/me/.local/share/virtualenvs/ENV-NAME/bin/python",
+           "python.jediEnabled": true    
+        }

@@ -29,12 +29,13 @@ def get_password_hash(password: str) -> str:
 
 
 def load_user_scopes(db: Session) -> Set:
-    return {role.name : role.description for role in db.query(Role).all()}
+    return {role.name: role.description for role in db.query(Role).all()}
 
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="token", scopes=load_user_scopes(get_session())
 )
+
 
 class Token(BaseModel):
     access_token: str
@@ -63,6 +64,7 @@ def get_current_user(
     db: Session = Depends(get_db_session),
 ):
     if security_scopes.scopes:
+        print(security_scopes)
         authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'
     else:
         authenticate_value = f"Bearer"
