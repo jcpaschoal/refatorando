@@ -64,7 +64,6 @@ def get_current_user(
     db: Session = Depends(get_db_session),
 ):
     if security_scopes.scopes:
-        print(security_scopes)
         authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'
     else:
         authenticate_value = f"Bearer"

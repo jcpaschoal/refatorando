@@ -2,6 +2,7 @@ from fastapi import APIRouter
 
 router = APIRouter()
 
+
 @router.get("/", response_model=schemas.AddressResponse)
 def add_address(
     address_in: schemas.AddressCreate,
@@ -10,7 +11,7 @@ def add_address(
 ):
 
     print(current_user)
-    
+
     if current_user is None:
         raise HTTPException(status_code=400, detail="User does not exists")
 

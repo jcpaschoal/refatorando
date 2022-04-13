@@ -101,7 +101,7 @@ class UserUpdate(UserBase):
         max_length=45,
         regex="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$",
     )
-
+    is_manager: bool | None
 
 class UserResponse(UserBase):
     class Config:

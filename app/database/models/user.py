@@ -1,4 +1,3 @@
-from msilib import Table
 from sqlalchemy import (
     Column,
     Integer,
@@ -12,6 +11,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 from .company import CompanyManager
+from .address import Address
 from .base_model import Base
 from enum import Enum
 
@@ -61,7 +61,7 @@ class User(Base):
     active = Column(BOOLEAN, nullable=False, default=True)
     nif = Column(Integer, nullable=True)
     roles = relationship("Role", secondary=UserRole)
-
+    address = relationship("Address")
 
 class ManagerCategory(Base):
     __tablename__ = "manager_category"
@@ -79,6 +79,7 @@ class Manager(Base):
     company = relationship(
         "Company", secondary=CompanyManager, back_populates="managers"
     )
+    active = Column(BOOLEAN, nullable=False, default=True)
 
 
 class Owner(Base):

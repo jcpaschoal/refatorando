@@ -25,7 +25,7 @@ def authenticate_user(
     for role in user.roles:
         for permission in role.permissions:
             scopes.append(permission.name)
-    
+
     access_token = create_access_token(
         data={"sub": user.email, "scopes": scopes},
         expires_delta=access_token_expires,
