@@ -85,3 +85,4 @@ class Manager(Base):
 class Owner(Base):
     owner_id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("user.user_id"), nullable=False)
+    active = Column(BOOLEAN, nullable=False, default=True)

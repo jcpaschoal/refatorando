@@ -1,3 +1,4 @@
+from tabnanny import check
 from fastapi import APIRouter, Depends, HTTPException, Path, Security
 from core.utils import get_db_session
 from core.auth import get_current_active_user
@@ -61,7 +62,14 @@ def update_user(
             status_code=400,
             detail="User does not exists",
         )
-
+    
+    if user_in.email is not None:
+        if service.user.check_if_email_already_exists(db, user_in.email, current_user.email):
+            raise HTTPException(
+            status_code=400,
+            detail="Email already exists in the sytem,",
+        )
+            
     user = service.user.update_user(db, user_in, current_user)
     return user
 
