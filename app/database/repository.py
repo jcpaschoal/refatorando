@@ -12,20 +12,29 @@ ModelType = TypeVar("ModelType", bound=Base)
 
 
 class SqlAlchemyRepository:
-    
-    def create(self, db: Session, db_obj: ModelType ,obj_in: Union[CreateSchemaType, Dict[str, Any]]) -> ModelType:
-        if  isinstance(obj_in, dict):          
+    def create(
+        self,
+        db: Session,
+        db_obj: ModelType,
+        obj_in: Union[CreateSchemaType, Dict[str, Any]],
+    ) -> ModelType:
+        if isinstance(obj_in, dict):
             obj_in_data = obj_in
         else:
             obj_in_data = obj_in.dict(exclude_unset=True)
-        
+
         db_obj = db_obj(**obj_in_data)  # type: ignore
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
         return db_obj
-   
-    def update(self, db: Session, db_obj: ModelType,  obj_in: Union[UpdateSchemaType, Dict[str, Any]]) -> ModelType:
+
+    def update(
+        self,
+        db: Session,
+        db_obj: ModelType,
+        obj_in: Union[UpdateSchemaType, Dict[str, Any]],
+    ) -> ModelType:
         obj_data = jsonable_encoder(db_obj)
         if isinstance(obj_in, dict):
             update_data = obj_in
@@ -38,5 +47,3 @@ class SqlAlchemyRepository:
         db.commit()
         db.refresh(db_obj)
         return db_obj
-
-

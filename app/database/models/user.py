@@ -63,6 +63,7 @@ class User(Base):
     roles = relationship("Role", secondary=UserRole)
     address = relationship("Address")
 
+
 class ManagerCategory(Base):
     __tablename__ = "manager_category"
     manager_category_id = Column(Integer, primary_key=True, index=True)

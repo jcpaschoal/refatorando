@@ -16,7 +16,7 @@ class AddressCreate(AddressBase):
 
 
 class AddressUpdate(AddressBase):
-    pass
+    address_id: int
 
 
 class AddressResponse(AddressBase):

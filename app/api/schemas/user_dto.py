@@ -103,6 +103,7 @@ class UserUpdate(UserBase):
     )
     is_manager: bool | None
 
+
 class UserResponse(UserBase):
     class Config:
         orm_mode = True

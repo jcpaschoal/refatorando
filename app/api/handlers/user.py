@@ -29,18 +29,11 @@ def create_user(
     return user_in
 
 
-# TODO retirar parametro do id e pegar do token
 @router.delete("/", status_code=200)
 def deactivate_user(
     db: Session = Depends(get_db_session),
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
-
-    if current_user is None:
-        raise HTTPException(
-            status_code=400,
-            detail="User does not exists",
-        )
 
     service.user.deactivate_user(db, current_user)
 
@@ -57,36 +50,26 @@ def update_user(
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
 
-    if current_user is None:
-        raise HTTPException(
-            status_code=400,
-            detail="User does not exists",
-        )
-    
     if user_in.email is not None:
-        if service.user.check_if_email_already_exists(db, user_in.email, current_user.email):
+        if service.user.check_if_email_already_exists(
+            db, user_in.email, current_user.email
+        ):
             raise HTTPException(
-            status_code=400,
-            detail="Email already exists in the sytem,",
-        )
-            
+                status_code=400,
+                detail="Email already exists in the sytem,",
+            )
+
     user = service.user.update_user(db, user_in, current_user)
     return user
 
 
 @router.get("/address", response_model=schemas.AddressResponse)
-def add_address(
-    obj_in: schemas.AddressCreate,
+def get_address(
     db: Session = Depends(get_db_session),
     current_user: User = Depends(get_current_active_user),
+    page_num: int = 1, page_size: int = 10
 ):
-
-    if current_user is None:
-        raise HTTPException(status_code=400, detail="User does not exists")
-
-    address = service.user.add_address(db, obj_in, current_user)
-
-    return address
+    pass
 
 
 @router.post("/address", response_model=schemas.AddressResponse)
@@ -95,36 +78,31 @@ def add_address(
     db: Session = Depends(get_db_session),
     current_user: User = Depends(get_current_active_user),
 ):
-
-    if current_user is None:
-        raise HTTPException(status_code=400, detail="User does not exists")
-
     address = service.user.add_address(db, obj_in, current_user)
-
     return address
 
 
 @router.put("/address", response_model=schemas.AddressResponse)
-def add_address(
-    obj_in: schemas.AddressCreate,
+def update_address(
+    obj_in: schemas.AddressUpdate,
     db: Session = Depends(get_db_session),
     current_user: User = Depends(get_current_active_user),
 ):
+    address = service.user.update_address(db, obj_in, current_user)
 
-    if current_user is None:
-        raise HTTPException(status_code=400, detail="User does not exists")
+    if not address:
+        raise HTTPException(status_code=400, detail="Address does not exists")
 
-    address = service.user.add_address(db, obj_in, current_user)
+    return address
 
 
-@router.delete("/address", response_model=schemas.AddressResponse)
-def add_address(
-    obj_in: schemas.AddressCreate,
+@router.delete("/address/{id}")
+def delete_address(
+    address_id: int = Path(..., title="The id of the address"),
     db: Session = Depends(get_db_session),
     current_user: User = Depends(get_current_active_user),
 ):
+    address = service.user.delete_address(db, address_id, current_user)
 
-    if current_user is None:
-        raise HTTPException(status_code=400, detail="User does not exists")
-
-    address = service.user.add_address(db, obj_in, current_user)
+    if not address:
+        raise HTTPException(status_code=400, detail="Address does not exists")
